@@ -115,6 +115,8 @@ prompt_git() {
     else
       prompt_segment green $CURRENT_FG
     fi
+		git_super_status
+		return
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
       mode=" <B>"
@@ -210,6 +212,7 @@ prompt_virtualenv() {
   fi
 }
 
+source ~/.oh-my-zsh/plugins/git-prompt/git-prompt.plugin.zsh
 # Status:
 # - was there an error
 # - am I root
