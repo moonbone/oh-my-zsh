@@ -28,6 +28,8 @@ def get_tagname_or_hash():
 # branch, remote_branch, untracked, staged, changed, conflicts, ahead, behind
 po = Popen(['git', 'status', '--porcelain', '--branch'], env=dict(os.environ, LANG="C"), stdout=PIPE, stderr=PIPE)
 stdout, sterr = po.communicate()
+po_desc = Popen(['git', 'describe'], env=dict(os.environ, LANG="C"), stdout=PIPE, stderr=PIPE)
+stdout_desc, sterr_desc = po_desc.communicate()
 if po.returncode != 0:
     sys.exit(0)  # Not a git repository
 
@@ -46,6 +48,7 @@ for st in status:
         else:
             # current and remote branch info
             branch, rest = st[2].strip().split('...')
+            branch += f"[{stdout_desc.decode('utf-8').strip()}]"
             if len(rest.split(' ')) == 1:
                 # remote_branch = rest.split(' ')[0]
                 pass
