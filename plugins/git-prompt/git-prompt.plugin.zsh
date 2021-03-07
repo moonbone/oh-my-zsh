@@ -40,6 +40,8 @@ function update_current_git_vars() {
     GIT_CONFLICTS=$__CURRENT_GIT_STATUS[5]
     GIT_CHANGED=$__CURRENT_GIT_STATUS[6]
     GIT_UNTRACKED=$__CURRENT_GIT_STATUS[7]
+    GIT_STASHED=$__CURRENT_GIT_STATUS[8]
+    GIT_CLEAN=$__CURRENT_GIT_STATUS[9]
 }
 
 git_super_status() {
@@ -65,10 +67,13 @@ git_super_status() {
       if [ "$GIT_UNTRACKED" -ne "0" ]; then
           STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_UNTRACKED"
       fi
-      if [ "$GIT_CHANGED" -eq "0" ] && [ "$GIT_CONFLICTS" -eq "0" ] && [ "$GIT_STAGED" -eq "0" ] && [ "$GIT_UNTRACKED" -eq "0" ]; then
+      if [ "$GIT_STASHED" -ne "0" ]; then
+          STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_STASHED$GIT_STASHED"
+      fi
+      if [ "$GIT_CLEAN" -eq "1" ]; then
           STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_CLEAN_INTERNAL"
       fi
-      STATUS="$STATUS%{$bg[$CURRENT_BG]$fg[$CURRENT_FG]%}$ZSH_THEME_GIT_PROMPT_SUFFIX"
+      STATUS="$STATUS%{$reset_color$bg[$CURRENT_BG]$fg[$CURRENT_FG]%}$ZSH_THEME_GIT_PROMPT_SUFFIX"
       echo -n "$STATUS"
     fi
 }
@@ -94,7 +99,8 @@ ZSH_THEME_GIT_PROMPT_CONFLICTS="%{✖%G%}"
 ZSH_THEME_GIT_PROMPT_CHANGED="%{✚%G%}"
 ZSH_THEME_GIT_PROMPT_BEHIND="%{↓%G%}"
 ZSH_THEME_GIT_PROMPT_AHEAD="%{↑%G%}"
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%{…%G%}"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%}%{…%G%}"
+ZSH_THEME_GIT_PROMPT_STASHED="%{$fg_bold[blue]%}%{⚑%G%}"
 ZSH_THEME_GIT_PROMPT_CLEAN_INTERNAL="%{✔%G%}"
 
 # Set the prompt.
